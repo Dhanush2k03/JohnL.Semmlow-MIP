@@ -1,0 +1,26 @@
+%An example of segmentation using pixel-based methods. Load the image of blood cells, and display this image along with the intensity histogram. Remove the edge pixels from the image, and display the histogram of this modified image. Determine thres- holds using the minimal variance iterative technique (Outso's method implemented by graythresh), and apply this approach to threshold both images. Display the resultant thresholded images.
+I = imread("38811.tif");
+imshow(I);
+h = fspecial('gaussian',12,2);
+I_f  = imfilter(I,h,'replicate');
+I_f_double = double(I_f);
+I_edge = edge(I_f,'canny',.3);
+I_edge_double = double(I_edge);
+I_rem = I_f_double .* imcomplement(I_edge_double);
+subplot(2,2,1);imshow(I_f);
+title('Orginal image');
+subplot(2,2,2);imhist(I_f);
+title('Edge removed');
+subplot(2,2,3);imshow(I_rem);
+subplot(2,2,4);imhist(I_rem);
+figure;
+t1  = graythresh(I);
+t2 = graythresh(I_f);
+Bw1 = im2bw(I,t1);
+Bw2 = im2bw(I_f,t2);
+subplot(1,2,1);
+imshow(Bw1);
+title('Threshold orginal image');
+subplot(1,2,2);;
+imshow(Bw2);
+title('Threshold masked image');

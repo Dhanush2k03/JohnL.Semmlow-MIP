@@ -1,0 +1,44 @@
+%Load the x-ray image of the spine, spine.tif, from the MATLAB Image Process- ing Toolbox. 
+% Slice the image into four different levels, then plot it in pseudocolor using red, green, blue, and yellow for each slice.
+% The 0-level slice should be blue; the next highest, green; the next, red; and the highest level, yellow. Use grayslice.
+% m and construct your own colormap. Plot the original and sliced images in the same figure. 
+% (If the original image also displays in pseudocolor, it is because the computer display is using the same four-level 
+% colormap for both images. In this case, you should convert the sliced image to RGB before displaying.)
+% Load the x-ray image of the spine
+
+original_image = imread('spine.tif');
+
+% Slice the image into four levels using grayslice
+sliced_images = grayslice(original_image, 4);
+
+% Define custom colormap with specific colors for each level
+custom_colormap = [
+    0 0 1; % Blue for 0-level slice
+    0 1 0; % Green for next highest slice
+    1 0 0; % Red for next slice
+    1 1 0  % Yellow for highest level slice
+];
+
+% Convert the sliced images to RGB format using the custom colormap
+rgb_sliced_images = ind2rgb(sliced_images, custom_colormap);
+
+% Plot the original image and sliced images in the same figure
+figure;
+subplot(2, 2, 1);
+imshow(original_image);
+title('Original Image');
+
+for i = 1:4
+    % Extract each RGB slice from rgb_sliced_images
+    rgb_slice = rgb_sliced_images(:, :, :, i);
+    
+    % Plot each slice with the corresponding pseudocolor
+    subplot(2, 2, i + 1);
+    imshow(rgb_slice);
+    title(['Slice ', num2str(i)]);
+end
+
+% Add a colorbar to the figure for reference
+colorbar('Ticks', [0.125, 0.375, 0.625, 0.875], 'TickLabels', {'Blue', 'Green', 'Red', 'Yellow'});
+
+
